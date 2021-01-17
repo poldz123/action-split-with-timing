@@ -1,3 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="bet.thescore.android.ui.adapters.viewholders.Hello3Test" tests="8" skipped="0" failures="0" errors="0" timestamp="2020-12-11T20:57:40" hostname="fv-az186-60" time="0.372">
+<testsuite name="com.sample.Hello3Test" tests="8" skipped="0" failures="0" errors="0" timestamp="2020-12-11T20:57:40" hostname="fv-az186-60" time="10">
+    <testcase name="verify 1" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="verify 2" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="verify 3" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="verify 4" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="verify 5" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="verify 6" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="verify 7" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="verify 8" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="verify 9" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="verify 10" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="&#39;verify 11&#39;" classname="com.sample.Hello3Test" time="1"/>
+    <testcase name="&quot;verify 12&quot;" classname="com.sample.Hello3Test" time="1"/>
+    <system-out/>
+    <system-err/>
 </testsuite>

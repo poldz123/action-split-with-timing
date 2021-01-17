@@ -27,6 +27,7 @@
   "dependencies": {
     "@actions/core": "^1.2.5",
     "collections": "^5.1.12",
+    "entities": "^2.1.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {

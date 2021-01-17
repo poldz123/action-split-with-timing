@@ -5,6 +5,8 @@ var path = require("path");
 var Deque = require("collections/deque");
 var Map = require("collections/map");
 const core = require("@actions/core");
+const entities = require("entities");
+
 
 let split = function (testPath, nodeIndex, nodeTotal, filesToExlude = []) {
   verify(testPath, nodeIndex, nodeTotal);
@@ -107,17 +109,22 @@ let splitWithTiming = async function (
                 let xml = JSON.parse(
                   convert.xml2json(await fs.readFile(testResultFiles[i]))
                 );
-                let testResultName = xml.elements[0].attributes.name;
-                let testResultTime = parseFloat(
-                  xml.elements[0].attributes.time
-                );
-                testResultTotalTime += testResultTime;
-                deque.add({ name: testResultName, time: testResultTime });
+                let testClass = xml.elements[0]
+                for (j = 0; j < testClass.elements.length; j++) {
+                  let testFunction = testClass.elements[j]
+                  if (testFunction.name !== "testcase") {
+                    continue
+                  }
+                  let testClassName = testFunction.attributes.classname
+                  let testName = testFunction.attributes.name;
+                  let testTime = parseFloat(
+                    testFunction.attributes.time
+                  );
+                  testResultTotalTime += testTime;
+                  deque.add({ className: testClassName, name: testName, time: testTime });
+                }
               }
               let testChunkMaxTime = testResultTotalTime / nodeTotal;
-              deque = deque.sorted((a, b) => {
-                return a.time - b.time;
-              });
               for (i = 0; i < nodeTotal; i++) {
                 let testNames = [];
                 var testChunkCurrentTime = 0;
@@ -128,8 +135,8 @@ let splitWithTiming = async function (
                   (testChunkCurrentTime < testChunkMaxTime ||
                     i === nodeTotal - 1)
                 ) {
-                  let result = isPollLast ? deque.pop() : deque.shift();
-                  testNames.push(result.name);
+                  let result = deque.shift();
+                  testNames.push(`${result.className}.${result.name}`);
                   testChunkCurrentTime += result.time;
                   isPollLast = false;
                   if (deque.length !== 0 && i === nodeTotal - 1) {
@@ -151,7 +158,7 @@ let splitWithTiming = async function (
                   }
                   let tests = testNames
                     .map((value) => {
-                      return `--tests ${value}`;
+                      return `--tests "${entities.encodeXML(value)}"`;
                     })
                     .join(" ");
                   core.info(

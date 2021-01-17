@@ -58,19 +58,19 @@ test("invalid test for missing directory", async () => {
 
 // Split with Timings
 
-test("valid tests with timings for a single test", async () => {
+test("valid test functions with timings on first node index", async () => {
   var tests = await splitWithTiming(
     "./data/test-1",
     "./data/test-result/test-app-result/",
-    1,
+    0,
     3
   );
   expect(tests).toEqual(
-    "--tests bet.thescore.android.ui.promotions.Hello1Test"
+    "--tests \"com.sample.Hello1Test.verify 1\" --tests \"com.sample.Hello1Test.verify 2\" --tests \"com.sample.Hello1Test.verify 3\" --tests \"com.sample.Hello2Test.verify 1\""
   );
 });
 
-test("valid tests with timings for a last single test", async () => {
+test("valid test functions with timings on last node index", async () => {
   var tests = await splitWithTiming(
     "./data/test-1",
     "./data/test-result/test-app-result/",
@@ -78,11 +78,13 @@ test("valid tests with timings for a last single test", async () => {
     3
   );
   expect(tests).toEqual(
-    "--tests bet.thescore.android.ui.adapters.viewholders.Hello3Test"
+    "--tests \"com.sample.Hello3Test.verify 6\" --tests \"com.sample.Hello3Test.verify 7\" " +
+    "--tests \"com.sample.Hello3Test.verify 8\" --tests \"com.sample.Hello3Test.verify 9\" --tests \"com.sample.Hello3Test.verify 10\" " +
+    "--tests \"com.sample.Hello3Test.&apos;verify 11&apos;\" --tests \"com.sample.Hello3Test.&quot;verify 12&quot;\""
   );
 });
 
-test("valid tests with timings for a multiple test", async () => {
+test("valid test functions with timings on 1 node total", async () => {
   var tests = await splitWithTiming(
     "./data/test-1",
     "./data/test-result/test-app-result/",
@@ -90,7 +92,12 @@ test("valid tests with timings for a multiple test", async () => {
     1
   );
   expect(tests).toEqual(
-    "--tests bet.thescore.android.ui.adapters.viewholders.Hello2Test --tests bet.thescore.android.ui.adapters.viewholders.Hello3Test --tests bet.thescore.android.ui.promotions.Hello1Test"
+    "--tests \"com.sample.Hello1Test.verify 1\" --tests \"com.sample.Hello1Test.verify 2\" --tests \"com.sample.Hello1Test.verify 3\" " + 
+    "--tests \"com.sample.Hello2Test.verify 1\" --tests \"com.sample.Hello3Test.verify 1\" --tests \"com.sample.Hello3Test.verify 2\" " +
+    "--tests \"com.sample.Hello3Test.verify 3\" --tests \"com.sample.Hello3Test.verify 4\" --tests \"com.sample.Hello3Test.verify 5\" " +
+    "--tests \"com.sample.Hello3Test.verify 6\" --tests \"com.sample.Hello3Test.verify 7\" --tests \"com.sample.Hello3Test.verify 8\" " +
+    "--tests \"com.sample.Hello3Test.verify 9\" --tests \"com.sample.Hello3Test.verify 10\" --tests \"com.sample.Hello3Test.&apos;verify 11&apos;\" " + 
+    "--tests \"com.sample.Hello3Test.&quot;verify 12&quot;\""
   );
 });
 

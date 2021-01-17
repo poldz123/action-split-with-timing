@@ -1,3 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="bet.thescore.android.ui.promotions.Hello1Test" tests="14" skipped="0" failures="0" errors="0" timestamp="2020-12-11T20:57:34" hostname="fv-az186-60" time="0.74">
+<testsuite name="com.sample.Hello1Test" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-12-11T20:57:34" hostname="fv-az186-60" time="4">
+    <testcase name="verify 1" classname="com.sample.Hello1Test" time="1"/>
+    <testcase name="verify 2" classname="com.sample.Hello1Test" time="1"/>
+    <testcase name="verify 3" classname="com.sample.Hello1Test" time="2"/>
+    <system-out/>
+    <system-err/>
 </testsuite>
