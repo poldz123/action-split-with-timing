@@ -66,7 +66,7 @@ test("valid test functions with timings on first node index", async () => {
     3
   );
   expect(tests).toEqual(
-    "--tests \"com.sample.Hello1Test.verify 1\" --tests \"com.sample.Hello1Test.verify 2\" --tests \"com.sample.Hello1Test.verify 3\" --tests \"com.sample.Hello2Test.verify 1\""
+    '--tests "com.sample.Hello1Test.verify 1" --tests "com.sample.Hello1Test.verify 2" --tests "com.sample.Hello1Test.verify 3" --tests "com.sample.Hello2Test.verify 1"'
   );
 });
 
@@ -78,9 +78,9 @@ test("valid test functions with timings on last node index", async () => {
     3
   );
   expect(tests).toEqual(
-    "--tests \"com.sample.Hello3Test.verify 6\" --tests \"com.sample.Hello3Test.verify 7\" " +
-    "--tests \"com.sample.Hello3Test.verify 8\" --tests \"com.sample.Hello3Test.verify 9\" --tests \"com.sample.Hello3Test.verify 10\" " +
-    "--tests \"com.sample.Hello3Test.&apos;verify 11&apos;\" --tests \"com.sample.Hello3Test.&quot;verify 12&quot;\""
+    '--tests "com.sample.Hello3Test.verify 6" --tests "com.sample.Hello3Test.verify 7" ' +
+      '--tests "com.sample.Hello3Test.verify 8" --tests "com.sample.Hello3Test.verify 9" --tests "com.sample.Hello3Test.verify 10" ' +
+      '--tests "com.sample.Hello3Test.&apos;verify 11&apos;" --tests "com.sample.Hello3Test.&quot;verify 12&quot;"'
   );
 });
 
@@ -92,12 +92,12 @@ test("valid test functions with timings on 1 node total", async () => {
     1
   );
   expect(tests).toEqual(
-    "--tests \"com.sample.Hello1Test.verify 1\" --tests \"com.sample.Hello1Test.verify 2\" --tests \"com.sample.Hello1Test.verify 3\" " + 
-    "--tests \"com.sample.Hello2Test.verify 1\" --tests \"com.sample.Hello3Test.verify 1\" --tests \"com.sample.Hello3Test.verify 2\" " +
-    "--tests \"com.sample.Hello3Test.verify 3\" --tests \"com.sample.Hello3Test.verify 4\" --tests \"com.sample.Hello3Test.verify 5\" " +
-    "--tests \"com.sample.Hello3Test.verify 6\" --tests \"com.sample.Hello3Test.verify 7\" --tests \"com.sample.Hello3Test.verify 8\" " +
-    "--tests \"com.sample.Hello3Test.verify 9\" --tests \"com.sample.Hello3Test.verify 10\" --tests \"com.sample.Hello3Test.&apos;verify 11&apos;\" " + 
-    "--tests \"com.sample.Hello3Test.&quot;verify 12&quot;\""
+    '--tests "com.sample.Hello1Test.verify 1" --tests "com.sample.Hello1Test.verify 2" --tests "com.sample.Hello1Test.verify 3" ' +
+      '--tests "com.sample.Hello2Test.verify 1" --tests "com.sample.Hello3Test.verify 1" --tests "com.sample.Hello3Test.verify 2" ' +
+      '--tests "com.sample.Hello3Test.verify 3" --tests "com.sample.Hello3Test.verify 4" --tests "com.sample.Hello3Test.verify 5" ' +
+      '--tests "com.sample.Hello3Test.verify 6" --tests "com.sample.Hello3Test.verify 7" --tests "com.sample.Hello3Test.verify 8" ' +
+      '--tests "com.sample.Hello3Test.verify 9" --tests "com.sample.Hello3Test.verify 10" --tests "com.sample.Hello3Test.&apos;verify 11&apos;" ' +
+      '--tests "com.sample.Hello3Test.&quot;verify 12&quot;"'
   );
 });
 
@@ -120,5 +120,21 @@ test("invalid tests with timings not in sync for a multiple test", async () => {
   );
   expect(tests).toEqual(
     "--tests Hello1Test --tests Hello2Test --tests Hello3Test"
+  );
+});
+
+test("valid tests with timings and the same class name", async () => {
+  var tests = await splitWithTiming(
+    "./data/test-1",
+    "./data/test-result/",
+    1,
+    3
+  );
+  expect(tests).toEqual(
+    '--tests "com.sample.Hello3Test.verify 7" --tests "com.sample.Hello3Test.verify 8" ' +
+      '--tests "com.sample.Hello3Test.verify 9" --tests "com.sample.Hello3Test.verify 10" ' +
+      '--tests "com.sample.Hello3Test.&apos;verify 11&apos;" --tests "com.sample.Hello3Test.&quot;verify 12&quot;" ' +
+      '--tests "com.sample.1.Hello1Test.verify 1" --tests "com.sample.1.Hello1Test.verify 2" ' +
+      '--tests "com.sample.1.Hello1Test.verify 3" --tests "com.sample.1.Hello2Test.verify 1"'
   );
 });

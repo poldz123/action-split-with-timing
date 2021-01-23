@@ -12660,7 +12660,6 @@ var Map = __webpack_require__(3857);
 const core = __webpack_require__(2186);
 const entities = __webpack_require__(3000);
 
-
 let split = function (testPath, nodeIndex, nodeTotal, filesToExlude = []) {
   verify(testPath, nodeIndex, nodeTotal);
   return new Promise((resolve) => {
@@ -12684,17 +12683,31 @@ let split = function (testPath, nodeIndex, nodeTotal, filesToExlude = []) {
   });
 };
 
-let isTestFilesOnSyncWithTestResults = function (testFiles, testResultFiles) {
+let isTestFilesOnSyncWithTestResults = async function (
+  testFiles,
+  testResultFiles
+) {
   let missingTests = [];
+  let duplicateTests = [];
   let testResultFilesMap = new Map();
-  testResultFiles.forEach((testResultFile) => {
+  for (i = 0; i < testResultFiles.length; i++) {
+    let testResultFile = testResultFiles[i];
+    let xml = JSON.parse(convert.xml2json(await fs.readFile(testResultFile)));
+
     let fileName = path.parse(testResultFile).name.split(".").pop();
+    let className = xml.elements[0].attributes.name;
+
     if (!testResultFilesMap.has(fileName)) {
-      testResultFilesMap.add(1, fileName);
+      testResultFilesMap.add([className], fileName);
     } else {
-      testResultFilesMap.add(testResultFilesMap.get(fileName) + 1, fileName);
+      let testClassNames = testResultFilesMap.get(fileName);
+      if (testClassNames.includes(className)) {
+        continue;
+      } else {
+        testResultFilesMap.add(testClassNames.push(className), fileName);
+      }
     }
-  });
+  }
   testFiles.forEach((testFile) => {
     let fileName = path.parse(testFile).name;
     if (testResultFilesMap.has(fileName)) {
@@ -12746,7 +12759,12 @@ let splitWithTiming = async function (
                 `Error: Reading files from ${testPath}: ${testResultFilesError}`
               );
             }
-            if (!isTestFilesOnSyncWithTestResults(testFiles, testResultFiles)) {
+            if (
+              !(await isTestFilesOnSyncWithTestResults(
+                testFiles,
+                testResultFiles
+              ))
+            ) {
               let tests = await split(
                 testPath,
                 nodeIndex,
@@ -12762,19 +12780,24 @@ let splitWithTiming = async function (
                 let xml = JSON.parse(
                   convert.xml2json(await fs.readFile(testResultFiles[i]))
                 );
-                let testClass = xml.elements[0]
+                let testClass = xml.elements[0];
+                if (testClass.elements === undefined) {
+                  continue;
+                }
                 for (j = 0; j < testClass.elements.length; j++) {
-                  let testFunction = testClass.elements[j]
+                  let testFunction = testClass.elements[j];
                   if (testFunction.name !== "testcase") {
-                    continue
+                    continue;
                   }
-                  let testClassName = testFunction.attributes.classname
+                  let testClassName = testFunction.attributes.classname;
                   let testName = testFunction.attributes.name;
-                  let testTime = parseFloat(
-                    testFunction.attributes.time
-                  );
+                  let testTime = parseFloat(testFunction.attributes.time);
                   testResultTotalTime += testTime;
-                  deque.add({ className: testClassName, name: testName, time: testTime });
+                  deque.add({
+                    className: testClassName,
+                    name: testName,
+                    time: testTime,
+                  });
                 }
               }
               let testChunkMaxTime = testResultTotalTime / nodeTotal;
